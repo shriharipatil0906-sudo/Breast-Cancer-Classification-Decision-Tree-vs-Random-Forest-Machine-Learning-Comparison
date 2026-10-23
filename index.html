@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Breast Cancer Classification</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        .header {
+            background: #1e3a5f;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #dce7f5;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 8px;
+            color: #1e3a5f;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1e3a5f;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+
+            background: #1e3a5f;
+            color: white;
+
+            border: none;
+            border-radius: 7px;
+
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #294f7c;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns:
+                repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-box {
+            background: #f7f9fc;
+            border-left: 5px solid #1e3a5f;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .result-box h3 {
+            color: #1e3a5f;
+            margin-bottom: 12px;
+        }
+
+        .prediction {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .error {
+            background: #ffe6e6;
+            color: #b00020;
+            padding: 15px;
+            border-radius: 7px;
+            margin-top: 20px;
+        }
+
+        .warning {
+            margin-top: 25px;
+            padding: 15px;
+            background: #fff8e1;
+            border-radius: 7px;
+            color: #665500;
+        }
+
+        footer {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        @media(max-width: 700px) {
+
+            .form-grid,
+            .results {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>Breast Cancer Classification</h1>
+
+    <p>
+        Decision Tree vs Random Forest
+        Machine Learning Comparison
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <div class="card">
+
+        <h2>Enter Feature Values</h2>
+
+        <p class="description">
+            Enter the required numerical feature values
+            to compare predictions from both machine
+            learning models.
+        </p>
+
+
+        <form method="POST">
+
+
+            <div class="form-grid">
+
+                {% for feature in features %}
+
+                <div class="input-group">
+
+                    <label>
+                        {{ feature.replace('_', ' ').title() }}
+                    </label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="{{ feature }}"
+                        placeholder="Enter value"
+                        required
+                    >
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <button type="submit">
+                Compare Predictions
+            </button>
+
+
+        </form>
+
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    {% if result %}
+
+    <div class="card">
+
+        <h2>Prediction Results</h2>
+
+        <div class="results">
+
+
+            <div class="result-box">
+
+                <h3>Decision Tree</h3>
+
+                <div class="prediction">
+                    {{ result.decision_tree }}
+                </div>
+
+                <p>
+                    Malignant Probability:
+                    <strong>
+                        {{ result.dt_probability }}%
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <div class="result-box">
+
+                <h3>Random Forest</h3>
+
+                <div class="prediction">
+                    {{ result.random_forest }}
+                </div>
+
+                <p>
+                    Malignant Probability:
+                    <strong>
+                        {{ result.rf_probability }}%
+                    </strong>
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="warning">
+
+            <strong>Note:</strong>
+            This application is developed only for
+            educational machine learning demonstration.
+            It should not be used for medical diagnosis.
+
+        </div>
+
+
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+
+<footer>
+
+    Machine Learning Project |
+    Decision Tree vs Random Forest
+
+</footer>
+
+
+</body>
+
+</html>
